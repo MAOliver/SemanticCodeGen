@@ -12,8 +12,8 @@ namespace SchemaSpider.Core
         public CodeConstructor Build( )
         {
             var cc =  new CodeConstructor( );
-         
             return cc;
         }
     }
+
 }

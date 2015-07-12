@@ -14,6 +14,7 @@ namespace SchemaSpider.Core
         private readonly CodeAttributeDeclaration[ ] _caDeclarations;
         private readonly string[ ] _comments;
         private readonly MemberAttributes? _memberAttributes;
+        private readonly CodeParameterDeclarationExpression _paramExpression;
 
         private CodePropertyBuilder
         (
@@ -25,6 +26,7 @@ namespace SchemaSpider.Core
             , CodeAssignStatement setStatement = null
             , CodeAttributeDeclaration[ ] caDeclarations = null
             , MemberAttributes? memberAttributes = null
+            , CodeParameterDeclarationExpression paramExpression = null
             , string[ ] comments = null
 
         )
@@ -38,6 +40,7 @@ namespace SchemaSpider.Core
             _caDeclarations = caDeclarations ?? new CodeAttributeDeclaration[ 0 ];
             _comments = comments ?? new string[ 0 ];
             _memberAttributes = memberAttributes;
+            _paramExpression = paramExpression;
         }
 
         public static CodePropertyBuilder New<T>( string name )
@@ -47,30 +50,35 @@ namespace SchemaSpider.Core
 
         public CodePropertyBuilder AddAttributes( MemberAttributes memberAttributes )
         {
-            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: memberAttributes, comments: _comments );
+            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: memberAttributes, paramExpression: _paramExpression, comments: _comments );
         }
 
         public CodePropertyBuilder AddCustomAttributes( params CodeAttributeDeclaration[ ] caDeclarations )
         {
-            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: caDeclarations, memberAttributes: _memberAttributes, comments: _comments );
+            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: caDeclarations, memberAttributes: _memberAttributes, paramExpression: _paramExpression, comments: _comments );
         }
 
         public CodePropertyBuilder AddComments( params string[ ] comments )
         {
-            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, comments: comments );
+            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, paramExpression: _paramExpression, comments: comments );
         }
 
         public CodePropertyBuilder AddGet( CodeMethodReturnStatement getStatement = null )
         {
-            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, comments: _comments );
+            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, paramExpression: _paramExpression, comments: _comments );
         }
 
         public CodePropertyBuilder AddSet( CodeAssignStatement setStatement = null )
         {
-            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, comments: _comments );
+            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, paramExpression: _paramExpression, comments: _comments );
         }
 
-        public CodeMemberProperty Build( CodeExpression initialization = null )
+        public CodePropertyBuilder AddParameterExpression( CodeParameterDeclarationExpression paramExpression )
+        {
+            return new CodePropertyBuilder( _type, _name, hasGet: _hasGet, hasSet: _hasSet, getStatement: _getStatement, setStatement: _setStatement, caDeclarations: _caDeclarations, memberAttributes: _memberAttributes, paramExpression: paramExpression, comments: _comments );
+        }
+
+        public CodeMemberProperty Build(  )
         {
             var cmf = new CodeMemberProperty
             {
@@ -85,6 +93,7 @@ namespace SchemaSpider.Core
             cmf.SetStatements.AddAllNonNull( ss => ss, _setStatement );
             cmf.Comments.AddAllNonNull( cm => new CodeCommentStatement( cm ), _comments );
             cmf.CustomAttributes.AddAllNonNull( ca => ca, _caDeclarations );
+            cmf.Parameters.AddAllNonNull(exp=>exp, _paramExpression);
             return cmf;
         }
 

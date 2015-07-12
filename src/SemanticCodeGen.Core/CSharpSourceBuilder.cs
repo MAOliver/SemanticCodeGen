@@ -1,6 +1,7 @@
 ﻿using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.IO;
+using System.Text;
 
 namespace SchemaSpider.Core
 {
@@ -10,24 +11,21 @@ namespace SchemaSpider.Core
     /// </summary> 
     public class CSharpSourceBuilder
     {
+        private readonly NamespaceBuilder[] _namespaces;
 
-        protected CSharpSourceBuilder()
+        protected CSharpSourceBuilder(NamespaceBuilder[] namespaces = null)
         {
-            
+            _namespaces = namespaces ?? new NamespaceBuilder[0];
         }
 
-
-        /// <summary> 
-        /// Define the compile unit to use for code generation.  
-        /// </summary>
-        private CodeCompileUnit _targetUnit;
-
-        protected CodeCompileUnit TargetUnit
+        public static CSharpSourceBuilder New()
         {
-            get
-            {
-                return _targetUnit = (_targetUnit ?? new CodeCompileUnit());
-            }
+            return new CSharpSourceBuilder( );
+        }
+
+        public CSharpSourceBuilder AddNamespaceCollection(params NamespaceBuilder[] namespaces)
+        {
+            return new CSharpSourceBuilder( namespaces );
         }
 
         //public virtual CSharpSourceBuilder AddClass( CodeTypeBuilder builder )
@@ -35,18 +33,23 @@ namespace SchemaSpider.Core
         /// <summary> 
         /// Generate CSharp source code from the compile unit. 
         /// </summary> 
-        /// <param name="filename">Output file name</param>
-        public void Build( string filename )
+        public string Build( )
         {
+            var codeCompileUnit = new CodeCompileUnit();
+            codeCompileUnit.Namespaces.AddAllNonNull(ns=>ns.Build(), _namespaces);
             CodeDomProvider provider = CodeDomProvider.CreateProvider( "CSharp" );
             CodeGeneratorOptions options = new CodeGeneratorOptions {BracingStyle = "C"};
-            using ( StreamWriter sourceWriter = new StreamWriter( filename ) )
+            StringBuilder sb = new StringBuilder();
+            using (StringWriter sw = new StringWriter(sb))
             {
                 provider.GenerateCodeFromCompileUnit(
-                    TargetUnit, sourceWriter, options );
+                    codeCompileUnit, sw, options );
             }
+            return sb.ToString();
         }
     }
+
+
 }
 
 /*/// <summary> 
