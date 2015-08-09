@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using JsonLD.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,9 +25,7 @@ namespace JsonLdTypeMapper
 
         public CSharpSourceBuilder ConvertToCSharp(JToken token)
         {
-
             var sourceBuilder = CSharpSourceBuilder.New();
-
             return sourceBuilder;
         }
 
@@ -44,7 +37,7 @@ namespace JsonLdTypeMapper
                     return null;
                 using ( Stream manifestStream = File.OpenRead( "W3C\\" + ( string ) j ) )
                 using ( TextReader reader = new StreamReader( manifestStream ) )
-                using ( JsonReader jreader = new Newtonsoft.Json.JsonTextReader( reader ) )
+                using ( JsonReader jreader = new JsonTextReader( reader ) )
                 {
                     return JToken.ReadFrom( jreader );
                 }
@@ -54,6 +47,5 @@ namespace JsonLdTypeMapper
                 return null;
             }
         }
-
     }
 }

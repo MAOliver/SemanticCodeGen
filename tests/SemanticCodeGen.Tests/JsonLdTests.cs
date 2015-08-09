@@ -17,6 +17,8 @@ namespace SchemaSpider.Tests
 
             var token = file.Read();
 
+            
+
             Assert.IsNotNull(token);
         }
     }

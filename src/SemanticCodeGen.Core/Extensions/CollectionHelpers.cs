@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 
-namespace SchemaSpider.Core
+namespace SchemaSpider.Core.Extensions
 {
     public static class CollectionHelpers
     {

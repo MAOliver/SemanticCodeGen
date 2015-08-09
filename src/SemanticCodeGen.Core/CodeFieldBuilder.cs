@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using SchemaSpider.Core.Extensions;
 
 namespace SchemaSpider.Core
 {

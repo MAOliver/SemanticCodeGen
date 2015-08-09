@@ -48,6 +48,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JsonLdFile.cs" />
+    <Compile Include="Primitives\Boolean.cs" />
+    <Compile Include="Primitives\DataType.cs" />
+    <Compile Include="Primitives\DataTypeRef.cs" />
+    <Compile Include="Primitives\Date.cs" />
+    <Compile Include="Primitives\DateTime.cs" />
+    <Compile Include="Primitives\Float.cs" />
+    <Compile Include="Primitives\Integer.cs" />
+    <Compile Include="Primitives\Number.cs" />
+    <Compile Include="Primitives\Text.cs" />
+    <Compile Include="Primitives\Time.cs" />
+    <Compile Include="Primitives\URL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
