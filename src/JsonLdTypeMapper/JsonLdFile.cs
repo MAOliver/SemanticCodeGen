@@ -29,7 +29,7 @@ namespace JsonLdTypeMapper
             return sourceBuilder;
         }
 
-        private JToken GetJson( JToken j )
+        public static JToken GetJson( JToken j )
         {
             try
             {
